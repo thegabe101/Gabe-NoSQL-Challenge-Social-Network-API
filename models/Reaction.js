@@ -1,6 +1,8 @@
 const { Schema, model, Types } = require('mongoose');
 const moment = require('moment');
 
+
+//our reactions will roughly mimic our thought js but i think they need to be given an id. not sure. IF they require an id, they will use the object id mongo provides
 const reactionsS = new schema({
     reaction_id: {
         type: Schema.Type.ObjectId,
@@ -17,6 +19,7 @@ const reactionsS = new schema({
         type: String,
         required: true
     },
+    //time made can follow same format as thoughts 
     timeMade: {
         type: Date,
         default: Date.now,

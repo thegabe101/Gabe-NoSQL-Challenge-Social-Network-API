@@ -10,4 +10,7 @@ const User = require('./User');
 
 const Thought = require('./Thought');
 
-module.exports = { User, Thought };
+//adding reaction model after deciding to form it separately
+const Reaction = require('./Reaction');
+
+module.exports = { User, Thought, Reaction };

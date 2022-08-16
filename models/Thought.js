@@ -13,6 +13,8 @@ const thoughtSchema = new Schema({
         validate: {
             len: [0, 500]
         },
+        //here is where we use moment. we set the default using the Data.now method provided by moment, then set our time format. 
+        //we will use the get that accepts an argument as format long month, day of, year, and then the exact time of publishing
         timeMade: {
             type: Date,
             default: Date.now,
@@ -25,6 +27,8 @@ const thoughtSchema = new Schema({
         reactions: [reactionsS]
     },
     {
+        //note that getters and virtuals cannot be async. That could come into play
+        //virtuals are not passed to JSON by default in mongoose, so we want to enable them here 
         toJSON: {
             virtuals: true,
             getters: true
