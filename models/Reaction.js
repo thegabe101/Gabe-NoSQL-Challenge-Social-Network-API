@@ -27,7 +27,12 @@ const reactionsS = new schema({
     },
     {
         toJSON: {
-            getters: true
-        }
+            getters: true,
+        },
+        id: false,
     }
-})
+});
+
+
+//export model for use in thought schema; did it this way for separation of concerns and to keep the models a little easier to read. 
+module.exports = reactionsS;
