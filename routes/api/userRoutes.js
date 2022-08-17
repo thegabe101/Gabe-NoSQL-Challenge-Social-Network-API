@@ -12,5 +12,15 @@ const {
     getAllUsers,
     getOneUser,
     createNewUser,
-    updateUser
-}
+    updateUser,
+    deleteUser,
+    addFriend,
+    deleteFriend,
+} = require('../../controllers/user');
+//never required for a variable like this before. don't see why it wouldn't work
+
+//now we need to specify which crud methods these controller functions are using. 
+
+router.route('/').get(getAllUsers).post(createNewUser);
+
+module.exports = router;

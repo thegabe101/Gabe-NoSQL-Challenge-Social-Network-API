@@ -11,6 +11,6 @@ const User = require('./User');
 const Thought = require('./Thought');
 
 //adding reaction model after deciding to form it separately. probably not necessary due to import to user model but can't hurt to include for now
-const Reaction = require('./Reaction');
+// const Reaction = require('./Reaction');
 
-module.exports = { User, Thought, Reaction };
+module.exports = { User, Thought };

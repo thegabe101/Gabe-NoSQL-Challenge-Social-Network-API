@@ -11,7 +11,7 @@ router.use('./api', apiRoutes);
 //     res.status(404).send({ msg: "Sorry, the server was unable to connect." });
 // });
 router.use((req, res) => {
-    return res.send('Wherever this is, it\'s the wrong place!');
+    res.send('Wherever this is, it\'s the wrong place!');
 });
 
 module.exports = router; 

@@ -5,9 +5,9 @@
 const { User, Thought } = require("../models");
 
 const userController = {
-    //well, what we do need? 
+    //well, what we do need?
     //we will certainly want a get all users and findone user. we could also do with a delete, an update, and of course a create
-    //first we can write our find all method. in nosql i believe this just uses the find method, which returns all queries 
+    //first we can write our find all method. in nosql i believe this just uses the find method, which returns all queries
     //equivalent to our other GET routes /api/users
     getAllUsers(req, res) {
         //this one should be about as simple as it gets. We find all object users and route this method to our get route in userRoutes
@@ -28,21 +28,23 @@ const userController = {
 
     //equivalent to our other POST routes /api/users
     //create user will also be fairly straight forward. It will take whatever the request body is and define a json package as user with that data
-    //we can refer to the model for our expected body input. it should look something like: 
+    //we can refer to the model for our expected body input. it should look something like:
     // username: 'input string'
     // email: 'input string'
-    //shouldn't be anything else since this is a post route- we don't have thoughts, reactions quite yet 
+    //shouldn't be anything else since this is a post route- we don't have thoughts, reactions quite yet
     createNewUser(req, res) {
         User.create(req.body)
             .then((newUserData) => res.json(newUserData))
         console.log(newUserData)
             .catch((err) => {
-                return res.status(500).json({ msg: "Sorry, something went wrong creating the new user." })
+                console.log(err)
+                res.status(500).json(err)
+               // res.status(500).json({ msg: "Sorry, something went wrong creating the new user." })
             })
     },
 
     //here we can make our update route
-    //this should accept two arguments: the parameters the user is being sought out by, and the body being updated  
+    //this should accept two arguments: the parameters the user is being sought out by, and the body being updated
     //we could also use the $set method here in the form of {$set: req.body}
     updateUser({ params, body }, res) {
         User.findOneAndUpdate({ _id: req.params.id }, body, { new: true, runValidators: true })
@@ -74,8 +76,10 @@ const userController = {
     //now we move on to the friend method. not exactly sure how this will work yet so i will come back after class today.
     //TODO: will need an add and delete friend route
 
-    addFriend()
+    // addFriend()
 
 
-    deleteFriend()
+    // deleteFriend()
 }
+
+module.exports = userController;

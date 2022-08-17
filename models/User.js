@@ -3,9 +3,10 @@
 //this also means we need to requrie mongoose, + any related model to user (in this case, Thought)
 
 //this is how we tell our models to use mongoose
-const { Schema, Model } = require('mongoose');
+// const mongoose = require('mongoose');
+const { Schema, model } = require('mongoose');
 //here is where we require the thought model ill build in the other file
-const Thought = require('./Thought');
+// const Thought = require('./Thought');
 
 //here is where we generate a user schema. 
 
@@ -36,12 +37,15 @@ const UserSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Thought'
     }],
+    //think of friends more like FOLLOWERS- doesnt change both users to have a friend. just files a friend of THIS user 
     friends: [{
+        //ref user links them as friends BASED on the userid
         type: Schema.Types.ObjectId,
         ref: 'User'
     }],
     //now we need to implement our schema option for transforming the returned object and accessing it post-mongoose query as a JSON object.
     //we can do this with toJSON, where we want to access the properties but omit the id 
+}, {
     toJSON: {
         virtuals: true,
         getters: true,
@@ -49,6 +53,7 @@ const UserSchema = new Schema({
     id: false,
 });
 
+// console.log(Schema);
 
 //here we create a virtual "property" we will call friend count. this, when called, will measure the friends list length of a given user or per user
 //we can then export this virtual as part of the user model below

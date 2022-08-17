@@ -1,19 +1,20 @@
 const { Schema, model, Types } = require('mongoose');
+// const mongoose = require('mongoose');
 const moment = require('moment');
 
-
+//unsure whether i need to use mongoose.schema here 
 //our reactions will roughly mimic our thought js but i think they need to be given an id. not sure. IF they require an id, they will use the object id mongo provides
-const reactionsS = new schema({
+const reactionsS = new Schema({
     reaction_id: {
-        type: Schema.Type.ObjectId,
+        type: Schema.Types.ObjectId,
         default: () => new Types.ObjectId()
     },
     reactionContent: {
         type: String,
         required: true,
-        validate: {
-            len: [0, 300]
-        }
+        // validate: {
+        //     len: [1, 300]
+        // }
     },
     username: {
         type: String,
@@ -25,12 +26,11 @@ const reactionsS = new schema({
         default: Date.now,
         get: (timeWritten) => moment(timeWritten).format('MMMM Do YYYY, h:mm:ss a')
     },
-    {
-        toJSON: {
-            getters: true,
-        },
-        id: false,
-    }
+}, {
+    toJSON: {
+        getters: true,
+    },
+    id: false,
 });
 
 
