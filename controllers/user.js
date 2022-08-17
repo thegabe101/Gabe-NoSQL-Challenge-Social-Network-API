@@ -55,5 +55,27 @@ const userController = {
                 }
                 res.json(updateUserData);
             }).catch(err => res.status(400).json(err));
-    }
+    },
+
+    //next we'll do delete user, which should be nearly identical to finding a single user except for a different method
+
+    deleteUser({ params }, res) {
+        User.findOneAndDelete({ _id: params.id })
+            .then((singleUserData) => {
+                if (!singleUserData) {
+                    res.status(404).json({ msg: "Sorry, no user with that ID could be found." });
+                    return;
+                }
+                res.json(singleUserData);
+            })
+            .catch((err) => res.status(400).json(err));
+    },
+
+    //now we move on to the friend method. not exactly sure how this will work yet so i will come back after class today.
+    //TODO: will need an add and delete friend route
+
+    addFriend()
+
+
+    deleteFriend()
 }

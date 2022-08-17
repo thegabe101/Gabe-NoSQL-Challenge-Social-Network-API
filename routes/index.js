@@ -7,8 +7,11 @@ const apiRoutes = require('./api');
 router.use('./api', apiRoutes);
 
 //if server does not connect for any reason
+// router.use((req, res) => {
+//     res.status(404).send({ msg: "Sorry, the server was unable to connect." });
+// });
 router.use((req, res) => {
-    res.status(404).send({ msg: "Sorry, the server was unable to connect." });
+    return res.send('Wherever this is, it\'s the wrong place!');
 });
 
 module.exports = router; 

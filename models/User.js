@@ -48,3 +48,14 @@ const UserSchema = new Schema({
     },
     id: false,
 });
+
+
+//here we create a virtual "property" we will call friend count. this, when called, will measure the friends list length of a given user or per user
+//we can then export this virtual as part of the user model below
+UserSchema.virtual('friendCount').get(function () {
+    return this.friends.length;
+});
+
+const User = model('User', UserSchema);
+//create model to be exported
+module.exports = User;
