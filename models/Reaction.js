@@ -12,6 +12,8 @@ const reactionsS = new Schema({
     reactionContent: {
         type: String,
         required: true,
+        minlength: 1,
+        maxlength: 280
         // validate: {
         //     len: [1, 300]
         // }

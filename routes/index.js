@@ -4,7 +4,7 @@ const router = require('express').Router();
 
 const apiRoutes = require('./api');
 
-router.use('./api', apiRoutes);
+router.use('/api', apiRoutes);
 
 //if server does not connect for any reason
 // router.use((req, res) => {
@@ -14,4 +14,6 @@ router.use((req, res) => {
     res.send('Wherever this is, it\'s the wrong place!');
 });
 
-module.exports = router; 
+module.exports = router;
+
+//TODO: looking for server error but its not here

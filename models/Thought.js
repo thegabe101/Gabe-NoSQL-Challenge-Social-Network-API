@@ -12,6 +12,8 @@ const thoughtSchema = new Schema({
         //minlength and maxlength may work as well if this validate doesn't work
         type: String,
         required: true,
+        minlength: 1,
+        maxlength: 500,
         // validate: {
         //     len: [1, 500],
         // },

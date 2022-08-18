@@ -1,3 +1,6 @@
+//nothing to see here, just designating our routes.
+//will go with the plural as i usually do so i dont get confused between routes and models
+
 const router = require('express').Router();
 
 const userRoutes = require('./userRoutes');

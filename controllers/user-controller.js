@@ -23,7 +23,7 @@ const userController = {
             .then(userData => res.json(userData))
             //if no user with id matching params is found
             .catch(err => res.status(500).json({ msg: "Sorry, we could not find a user matching that search." }));
-        console.log(userData);
+        // console.log(userData);
     },
 
     //equivalent to our other POST routes /api/users
@@ -35,11 +35,11 @@ const userController = {
     createNewUser(req, res) {
         User.create(req.body)
             .then((newUserData) => res.json(newUserData))
-        console.log(newUserData)
+            // console.log(newUserData)
             .catch((err) => {
                 console.log(err)
                 res.status(500).json(err)
-               // res.status(500).json({ msg: "Sorry, something went wrong creating the new user." })
+                // res.status(500).json({ msg: "Sorry, something went wrong creating the new user." })
             })
     },
 
@@ -47,7 +47,7 @@ const userController = {
     //this should accept two arguments: the parameters the user is being sought out by, and the body being updated
     //we could also use the $set method here in the form of {$set: req.body}
     updateUser({ params, body }, res) {
-        User.findOneAndUpdate({ _id: req.params.id }, body, { new: true, runValidators: true })
+        User.findOneAndUpdate({ _id: params.id }, body, { new: true, runValidators: true })
             .then(updateUserData => {
                 if (!updateUserData) {
                     res.status(404).json({ msg: "We're sorry- no user by that name was found in our database." });
@@ -73,13 +73,46 @@ const userController = {
             .catch((err) => res.status(400).json(err));
     },
 
-    //now we move on to the friend method. not exactly sure how this will work yet so i will come back after class today.
-    //TODO: will need an add and delete friend route
+    //this is where we will flex our virtual- adding something that isnt really there in the model
+    addFriend({ params }, res) {
+        User.findByIdAndUpdate(
+            { _id: params.id },
+            { $addToSet: { friends: params.friendId } },
+            { new: true }
+        ).then((userData) => {
+            if (!userData) {
+                res.status(404).json({ msg: "No user matching that id was found in our database." });
+                return;
+            }
+            res.json(userData);
+        }).catch((err) => {
+            res.status(400).json(err);
+        });
+    },
 
-    // addFriend()
-
-
-    // deleteFriend()
+    deleteFriend({ params }, res) {
+        User.findByIdAndUpdate(
+            { _id: params.id },
+            //use pull to remove all instances of a value that match this friend param
+            { $pull: { friends: params.friendId } },
+            { new: true, runValidators: true }
+        ).then((userData) => {
+            if (!userData) {
+                res.status(404).json({ msg: "No friend with that id was found in our database." });
+                return;
+            }
+            res.json(userData);
+        }).catch((err) => res.status(400).json(err))
+    }
 }
+
+//now we move on to the friend method. not exactly sure how this will work yet so i will come back after class today.
+//TODO: will need an add and delete friend route
+
+// addFriend()
+
+
+// deleteFriend()
+
 
 module.exports = userController;
