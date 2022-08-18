@@ -10,7 +10,20 @@ const {
     getAllThoughts,
     getSingleThought,
     writeThought,
+    changeThought,
     deleteThought,
     addReaction,
     deleteReaction
 } = require('../../controllers/thought-controller');
+
+
+//base route can get all and write 
+router.route('/').get(getAllThoughts).post(writeThought);
+
+
+//id will do the picky things- update, delete, and get single
+// router.route('/:id').get(getSingleThought).put(changeThought).delete(deleteThought);
+
+//try these first and then build reaction routes 
+
+module.exports = router; 
