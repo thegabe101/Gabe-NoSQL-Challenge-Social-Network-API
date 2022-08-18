@@ -77,6 +77,8 @@ const userController = {
     addFriend({ params }, res) {
         User.findByIdAndUpdate(
             { _id: params.id },
+            //use mongoose unique methods to alter the friend array contained in user model currently empty
+            //virtuals will be able to tell us friend count- which is not an attribute within the array
             { $addToSet: { friends: params.friendId } },
             { new: true }
         ).then((userData) => {
@@ -114,5 +116,6 @@ const userController = {
 
 // deleteFriend()
 
+//export the entirety of the controller to be used in the userRoutes
 
 module.exports = userController;
