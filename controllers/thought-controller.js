@@ -96,6 +96,22 @@ const thoughtController = {
                     : res.json({ msg: 'Thought deleted.' })
             ).catch((err) => res.status(500).json(err));
     },
+
+    //changeThought
+    changeThought(req, res) {
+        Thought.findOneAndUpdate(
+            { _id: req.params.thoughtId },
+            { $set: req.body },
+            { runValidators: true, New: true }
+        )
+            .then((user) =>
+                !user
+                    ? res.status(404).json({ message: "Sorry, no matching thought was found in our database." })
+                    : res.json(user)
+            )
+            .catch((err) => res.status(500).json(err));
+    },
+
     // addReaction
     //these final two crud functions should look nearly identical. 
     //We are either updating a reactopm or deleting it; in the case of update, we are pushing it onto the array of reactions contained by that thought.
@@ -116,17 +132,20 @@ const thoughtController = {
         ).catch((err) => res.status(500).json(err));
     },
     // deleteReaction
-    removeTag(req, res) {
+    deleteReaction(req, res) {
         Thought.findOneAndUpdate(
             { _id: req.params.thoughtId },
             { $pull: { reactions: { reactionId: req.params.reactionId } } },
             { runValidators: true, new: true }
-        ).then((Thought) =>
-            !Thought
-                ? res.status(404).json({ msg: 'Sorry, no thought with that id has been found in our database.' })
-                : res.json(Thought)
-        ).catch((err) => res.status(500).json(err));
-    }
-};
+        )
+            .then((thought) =>
+                !thought
+                    ? res.status(404).json({ message: "Sorry, no matching reaction found in our database." })
+                    : res.json(thought)
+            )
+            .catch((err) => res.status(500).json(err));
+    },
+
+}
 
 module.exports = thoughtController;

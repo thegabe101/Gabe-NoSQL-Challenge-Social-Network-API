@@ -22,8 +22,14 @@ router.route('/').get(getAllThoughts).post(writeThought);
 
 
 //id will do the picky things- update, delete, and get single
-// router.route('/:id').get(getSingleThought).put(changeThought).delete(deleteThought);
+//these may not have been working because i was writing the path wrong. it needs to be thoughtId instead of id due to the parameters in the crud function
+router.route('/:thoughtId').get(getSingleThought).put(changeThought).delete(deleteThought);
 
 //try these first and then build reaction routes 
+
+//need to be careful about these paths in insomnia
+router.route('/:thoughtId/reactions').post(addReaction);
+
+router.route('/:thoughtId/reactions/:reactionId').delete(deleteReaction);
 
 module.exports = router; 
