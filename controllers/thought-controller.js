@@ -61,21 +61,38 @@ const thoughtController = {
     //     )
     // }
 
-    writeThought(req, res) {
-        Thought.create(req.body)
-            .then((Thought) => {
+    // writeThought(req, res) {
+    //     Thought.create(req.body)
+    //         .then((Thought) => {
+    //             return User.findOneAndUpdate(
+    //                 { _id: req.body.userId },
+    //                 { $addToSet: { thoughts: Thought._id } },
+    //                 { new: true }
+    //             );
+    //         }).then((User) =>
+    //             !User ? res.status(404).json({ msg: "A thought has been recorded but no user was found" })
+    //                 : res.json('Thought recorded')
+    //         ).catch((err) => {
+    //             console.log(err);
+    //             res.status(500).json(err);
+    //         });
+    // },
+
+    writeThought({ params, body }, res) {
+        Thought.create(body)
+            .then(({ _id }) => {
                 return User.findOneAndUpdate(
-                    { _id: req.body.userId },
-                    { $addToSet: { thoughts: Thought._id } },
+                    { _id: params.userId },
+                    { $push: { thoughts: _id } },
                     { new: true }
-                );
-            }).then((User) =>
-                !User ? res.status(404).json({ msg: "A thought has been recorded but no user was found" })
-                    : res.json('Thought recorded')
-            ).catch((err) => {
-                console.log(err);
-                res.status(500).json(err);
-            });
+                )
+            }).then(thoughtData => {
+                if (!thoughtData) {
+                    res.status(404).json({ msg: 'No thought data could be recorded. ' });
+                    return;
+                }
+                res.json(thoughtData);
+            }).catch(err => res.json(err));
     },
 
 

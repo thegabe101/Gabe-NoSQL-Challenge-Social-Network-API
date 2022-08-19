@@ -18,7 +18,14 @@ const {
 
 
 //base route can get all and write 
-router.route('/').get(getAllThoughts).post(writeThought);
+//this is actually erroneous. i think after experimentation we need to separate get and post- the post needs a specific user id fed to it. 
+// router.route('/').get(getAllThoughts).post(writeThought);
+router.route('/').get(getAllThoughts);
+
+//here is the route that will post a specific thought to a specific user
+//route is /api/thoughts/:userid
+router.route('/:userId').post(writeThought);
+
 
 // /api/thoughts/thoughtId/objectid
 //id will do the picky things- update, delete, and get single
