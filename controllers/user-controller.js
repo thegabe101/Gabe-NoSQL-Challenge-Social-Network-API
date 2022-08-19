@@ -18,8 +18,9 @@ const userController = {
 
     //equivalent to our other GET routes /api/users/:id
     //here we can do nearly the same thing, except that the findOne method takes in a parameter of the object id we are identifying by. in this case, it will be the id attribute for user
+    //populate doesn't seem to be working here. need to figure out why it isnt populating the thought content. 
     getOneUser(req, res) {
-        User.findOne({ _id: req.params.id })
+        User.findOne({ _id: req.params.id }).populate('Thought')
             .then(userData => res.json(userData))
             //if no user with id matching params is found
             .catch(err => res.status(500).json({ msg: "Sorry, we could not find a user matching that search." }));
@@ -46,6 +47,8 @@ const userController = {
     //here we can make our update route
     //this should accept two arguments: the parameters the user is being sought out by, and the body being updated
     //we could also use the $set method here in the form of {$set: req.body}
+    //update methods are DESTRUCTIVE but i think its ok here in users.
+    //in thoughts, we need to pass in only the specific values we want or else run risk of overwrite
     updateUser({ params, body }, res) {
         User.findOneAndUpdate({ _id: params.id }, body, { new: true, runValidators: true })
             .then(updateUserData => {

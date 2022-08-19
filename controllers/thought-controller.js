@@ -61,12 +61,72 @@ const thoughtController = {
     //     )
     // }
 
+    writeThought(req, res) {
+        Thought.create(req.body)
+            .then((Thought) => {
+                return User.findOneAndUpdate(
+                    { _id: req.body.userId },
+                    { $addToSet: { thoughts: Thought._id } },
+                    { new: true }
+                );
+            }).then((User) =>
+                !User ? res.status(404).json({ msg: "A thought has been recorded but no user was found" })
+                    : res.json('Thought recorded')
+            ).catch((err) => {
+                console.log(err);
+                res.status(500).json(err);
+            });
+    },
+
 
     // deleteThought
-
+    deleteThought(req, res) {
+        Thought.findOneAndRemove({ _id: req.params.ThoughtId })
+            .then((Thought) =>
+                !Thought
+                    ? res.status(404).json({ msg: "Sorry, no thought with this id has been found in our database." })
+                    : Thought.findOneAndUpdate(
+                        { thoughts: req.params.thoughtId },
+                        { $pull: { thoughts: req.params.thoughtId } },
+                        { new: true }
+                    )
+            ).then((User) =>
+                !User
+                    ? res.status(404).json({ msg: 'Sorry, no user with that id has been found in our database.' })
+                    : res.json({ msg: 'Thought deleted.' })
+            ).catch((err) => res.status(500).json(err));
+    },
     // addReaction
-
+    //these final two crud functions should look nearly identical. 
+    //We are either updating a reactopm or deleting it; in the case of update, we are pushing it onto the array of reactions contained by that thought.
+    //however, we don't use push but addtoset, unique to mongoose i believe
+    //for delete, we can use $pull. The big difference is when updating, we are posting to the body of the reaction;
+    //when deleting we are querying by the reactions id and pulling it from the array
+    //in both cases we use a turnery function to check if the object id exists. throw an error if not, or update/delete.
+    //otherwise, we can throw a server error. 
+    addReaction(req, res) {
+        Thought.findOneAndUpdate(
+            { _id: req.params.thoughtId },
+            { $addToSet: { reactions: req.body } },
+            { runValidators: true, new: true }
+        ).then((Thought) =>
+            !Thought
+                ? res.status(404).json({ msg: 'Sorry, no thought with that id has been found in our database.' })
+                : res.json(Thought)
+        ).catch((err) => res.status(500).json(err));
+    },
     // deleteReaction
+    removeTag(req, res) {
+        Thought.findOneAndUpdate(
+            { _id: req.params.thoughtId },
+            { $pull: { reactions: { reactionId: req.params.reactionId } } },
+            { runValidators: true, new: true }
+        ).then((Thought) =>
+            !Thought
+                ? res.status(404).json({ msg: 'Sorry, no thought with that id has been found in our database.' })
+                : res.json(Thought)
+        ).catch((err) => res.status(500).json(err));
+    }
 };
 
 module.exports = thoughtController;
