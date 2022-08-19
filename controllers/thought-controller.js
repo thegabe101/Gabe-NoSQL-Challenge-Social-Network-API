@@ -4,7 +4,8 @@ const { User, Thought } = require("../models");
 //my first thought is to select and sort. we learned about .sort in class and i wonder if i could sort all thought by id
 //the issue with select is I am not sure where to select. do i select the version or do i select the id?
 
-const thoughtController = {
+// const thoughtController = {
+module.exports = {
 
     //for all, i suppose we theoretically dont need to do any selecting.
     //we can simply find all thoughts from all users
@@ -13,19 +14,19 @@ const thoughtController = {
             .then((thought) => {
                 res.status(200).json(thought)
             }).catch((err) => {
-                res.status(500).json({ msg: "Sorry, something went wrong getting that thought." })
+                res.status(500).json({ msg: "Sorry, something went wrong getting thoughts." })
+                console.log(err);
             })
     },
     //TODO: don't keep forgetting the commas when closing these functions- it causes hard to fix syntax errors later
 
     //i suppose we can try getting the thought by id before trying anything more funky.
     //in that case we will use params, not req
-    getSingleThought({ params }, res) {
-        Thought.findOne({ _id: params.id })
+    getSingleThought(req, res) {
+        Thought.findOne({ _id: req.params.thoughtId })
             .then((thoughtData) => res.json(thoughtData))
             .catch((err) => {
-                console.log('this method is working')
-                res.status(500).json(err);
+                res.json({ msg: 'what is going on' });
             });
     },
 
@@ -49,6 +50,8 @@ const thoughtController = {
     //         } res.json(userThoughtData);
     //     }).catch((err) => res.json(err));
     // },
+
+    //still trying to figure out how to get the thought content to populate properly, but my latest writethought is correctly routing to its user 
 
 
     // writeThought(req, res) {
@@ -95,25 +98,6 @@ const thoughtController = {
             }).catch(err => res.json(err));
     },
 
-
-    // deleteThought
-    deleteThought(req, res) {
-        Thought.findOneAndRemove({ _id: req.params.ThoughtId })
-            .then((Thought) =>
-                !Thought
-                    ? res.status(404).json({ msg: "Sorry, no thought with this id has been found in our database." })
-                    : Thought.findOneAndUpdate(
-                        { thoughts: req.params.thoughtId },
-                        { $pull: { thoughts: req.params.thoughtId } },
-                        { new: true }
-                    )
-            ).then((User) =>
-                !User
-                    ? res.status(404).json({ msg: 'Sorry, no user with that id has been found in our database.' })
-                    : res.json({ msg: 'Thought deleted.' })
-            ).catch((err) => res.status(500).json(err));
-    },
-
     //changeThought
     changeThought(req, res) {
         Thought.findOneAndUpdate(
@@ -129,6 +113,25 @@ const thoughtController = {
             .catch((err) => res.status(500).json(err));
     },
 
+    // deleteThought
+    deleteThought(req, res) {
+        Thought.findOneAndRemove({ _id: req.params.thoughtId })
+            .then((Thought) =>
+                !Thought
+                    ? res.status(404).json({ msg: "Sorry, no thought with this id has been found in our database." })
+                    : Thought.findOneAndUpdate(
+                        { thoughts: req.params.thoughtId },
+                        { $pull: { thoughts: req.params.thoughtId } },
+                        { new: true }
+                    )
+            ).then((User) =>
+                !User
+                    ? res.status(404).json({ msg: 'Sorry, no user with that id has been found in our database.' })
+                    : res.json({ msg: 'Thought deleted.' })
+            ).catch((err) => res.status(500).json(err));
+    },
+
+
     // addReaction
     //these final two crud functions should look nearly identical. 
     //We are either updating a reactopm or deleting it; in the case of update, we are pushing it onto the array of reactions contained by that thought.
@@ -141,7 +144,8 @@ const thoughtController = {
         Thought.findOneAndUpdate(
             { _id: req.params.thoughtId },
             { $addToSet: { reactions: req.body } },
-            { runValidators: true, new: true }
+            { runValidators: true, new: true },
+            console.log(req.body)
         ).then((Thought) =>
             !Thought
                 ? res.status(404).json({ msg: 'Sorry, no thought with that id has been found in our database.' })
@@ -165,4 +169,4 @@ const thoughtController = {
 
 }
 
-module.exports = thoughtController;
+// module.exports = thoughtController;

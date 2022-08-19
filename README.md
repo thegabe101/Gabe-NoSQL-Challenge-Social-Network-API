@@ -30,7 +30,10 @@ This was a back-end project focused on creating the supporting database for a so
 
 ## Bugs
 
-- Currently there are no known bugs within the program. Things should route correctly and be properly retrievable from within Insomnia.
+- Currently there several bugs within the program:
+
+1. Reactions are not properly posting to the thought body. There were issues with the virtuals regarding reactions, causing system-wide breakage. I removed them in order to get an MVP.
+2. The time posted functions on thoughts and reactions are not working properly. This seems to be a model issue.
 
 ## Screenshots
 
