@@ -31,11 +31,11 @@ router.route('/').get(getAllUsers).post(createNewUser);
 
 //api/users/:id
 //route method calls for get by id, delete by id, update by id
-router.route('/:id').get(getOneUser).delete(deleteUser).put(updateUser);
+router.route('/:userId').get(getOneUser).delete(deleteUser).put(updateUser);
 
 
 // //api/users/friends/:friendId
-router.route('/:id/friends/:friendId').post(addFriend).delete(deleteFriend);
+router.route('/:userId/friends/:friendId').post(addFriend).delete(deleteFriend);
 
 //export the router
 module.exports = router;

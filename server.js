@@ -15,7 +15,7 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 //is the reason im having server issues no public static middleware??
-app.use(express.static('public'));
+// app.use(express.static('public'));
 // app.use(routes);
 app.use(require('./routes'));
 

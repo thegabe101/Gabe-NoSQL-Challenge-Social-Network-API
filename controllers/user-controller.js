@@ -19,12 +19,23 @@ const userController = {
     //equivalent to our other GET routes /api/users/:id
     //here we can do nearly the same thing, except that the findOne method takes in a parameter of the object id we are identifying by. in this case, it will be the id attribute for user
     //populate doesn't seem to be working here. need to figure out why it isnt populating the thought content. 
+    // getOneUser({ params }, res) {
+    //     User.findOne({ _id: params.userId }).populate('thoughts').populate('friends')
+    //         .then(userData => res.json(userData))
+    //         //if no user with id matching params is found
+    //         .catch(err => res.status(500).json({ msg: "Sorry, we could not find a user matching that search." }));
+    //     // console.log(userData);
+    // },
+
     getOneUser(req, res) {
-        User.findOne({ _id: req.params.id }).populate('Thought')
-            .then(userData => res.json(userData))
-            //if no user with id matching params is found
-            .catch(err => res.status(500).json({ msg: "Sorry, we could not find a user matching that search." }));
-        // console.log(userData);
+        User.findOne({ _id: req.params.userId }).populate('thoughts').populate('friends')
+            .then((userData) => {
+                if (!userData) {
+                    res.status(404).json({ msg: "Sorry, no user with that id could be found in our database." })
+                    return;
+                }
+                res.json(userData);
+            }).catch((err) => res.status(400).json(err));
     },
 
     //equivalent to our other POST routes /api/users
@@ -33,8 +44,8 @@ const userController = {
     // username: 'input string'
     // email: 'input string'
     //shouldn't be anything else since this is a post route- we don't have thoughts, reactions quite yet
-    createNewUser(req, res) {
-        User.create(req.body)
+    createNewUser({ body }, res) {
+        User.create(body)
             .then((newUserData) => res.json(newUserData))
             // console.log(newUserData)
             .catch((err) => {
@@ -50,7 +61,7 @@ const userController = {
     //update methods are DESTRUCTIVE but i think its ok here in users.
     //in thoughts, we need to pass in only the specific values we want or else run risk of overwrite
     updateUser({ params, body }, res) {
-        User.findOneAndUpdate({ _id: params.id }, body, { new: true, runValidators: true })
+        User.findOneAndUpdate({ _id: params.userId }, body, { new: true, runValidators: true })
             .then(updateUserData => {
                 if (!updateUserData) {
                     res.status(404).json({ msg: "We're sorry- no user by that name was found in our database." });
@@ -65,7 +76,7 @@ const userController = {
     //next we'll do delete user, which should be nearly identical to finding a single user except for a different method
 
     deleteUser({ params }, res) {
-        User.findOneAndDelete({ _id: params.id })
+        User.findOneAndDelete({ _id: params.userId })
             .then((singleUserData) => {
                 if (!singleUserData) {
                     res.status(404).json({ msg: "Sorry, no user with that ID could be found." });
@@ -79,7 +90,7 @@ const userController = {
     //this is where we will flex our virtual- adding something that isnt really there in the model
     addFriend({ params }, res) {
         User.findByIdAndUpdate(
-            { _id: params.id },
+            { _id: params.userId },
             //use mongoose unique methods to alter the friend array contained in user model currently empty
             //virtuals will be able to tell us friend count- which is not an attribute within the array
             { $addToSet: { friends: params.friendId } },
@@ -97,7 +108,7 @@ const userController = {
 
     deleteFriend({ params }, res) {
         User.findByIdAndUpdate(
-            { _id: params.id },
+            { _id: params.userId },
             //use pull to remove all instances of a value that match this friend param
             { $pull: { friends: params.friendId } },
             { new: true, runValidators: true }

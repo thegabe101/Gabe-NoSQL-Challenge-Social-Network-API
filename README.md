@@ -37,8 +37,6 @@ This was a back-end project focused on creating the supporting database for a so
 - ![Alt= Screenshot showing server page in VS Code.](./screenshots/screenshot1.jpg)
 - ![Alt= Screenshot showing user running the server using nodemon npm in the integrated terminal.](./screenshots/screenshot2.jpg)
 - ![Alt= Screenshot showing the home page open in the browser window.](./screenshots/screenshot3.jpg)
-- ![Alt= Screenshot showing user recording a note.](./screenshots/screenshot4.jpg)
-- ![Alt= Screenshot showing page after a note has been saved.](./screenshots/screenshot5.jpg)
 
 ## Credits
 
