@@ -38,8 +38,8 @@ This was a back-end project focused on creating the supporting database for a so
 ## Screenshots
 
 - ![Alt= Screenshot showing server page in VS Code.](./screenshots/screenshot1.jpg)
-- ![Alt= Screenshot showing user running the server using nodemon npm in the integrated terminal.](./screenshots/screenshot2.jpg)
-- ![Alt= Screenshot showing the home page open in the browser window.](./screenshots/screenshot3.jpg)
+- ![Alt= Screenshot showing controller functions.](./screenshots/screenshot2.jpg)
+- ![Alt= Screenshot showing data being retrieved in Insomnia.](./screenshots/screenshot3.jpg)
 
 ## Credits
 
